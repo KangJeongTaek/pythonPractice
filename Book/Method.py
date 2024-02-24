@@ -50,7 +50,7 @@ def delete():
             if isinstance(i,Book.Ebook):
                 print(f'도서명 : {i.getTitle()}\n저자명 : {i.getAuthor()}\n가격 : {i.getPrice()}\n출판사 : {i.getPublisher()}\n호환 기기 : {i.deviceInfo()}를 삭제합니다.')
             elif isinstance(i,Book.PaperBook):
-                print(f'도서명 : {i.getTitle()}\n저자명 : {i.getAuthor()}\n가격 : {i.getPrice()}\n출판사 : {i.getPublisher()}\n호환 기기 : {i.sizeInfo()}를 삭제합니다.')
+                print(f'도서명 : {i.getTitle()}\n저자명 : {i.getAuthor()}\n가격 : {i.getPrice()}\n출판사 : {i.getPublisher()}\n페이지 수 : {i.sizeInfo()}를 삭제합니다.')
             print('-'*10)    
             booklist.remove(i)
             print()
@@ -59,7 +59,40 @@ def delete():
     
     if not found:
         print(f'찾으시는 이름의 책이 없습니다.')
+
+def confirmation():
+    for book in booklist:
+        print('-'*20)
+        if isinstance(book,Book.Ebook):
+            print(f'도서명 : {book.getTitle()}\n저자명 : {book.getAuthor()}\n가격 : {book.getPrice()}')
+            print(f'출판사 : {book.getPublisher()}\n호환 기기 : {book.deviceInfo()}')
+        elif isinstance(book,Book.PaperBook):
+            print(f'도서명 : {book.getTitle()}\n저자명 : {book.getAuthor()}\n가격 : {book.getPrice()}')
+            print(f'출판사 : {book.getPublisher()}\n페이지 수 : {book.sizeInfo()}')
+        print('-'*20)
     
+def purChase():
+    bookType = input('1. 전자책 | 2. 종이책')
+    
+    totalPrice = 0
+    if bookType == '1':
+        for book in booklist:
+            if isinstance(book,Book.Ebook):
+                totalPrice += int(book.getPrice())
+                print(f'총 가격은 세금을 제외하고 {totalPrice}이며, 부가세를 포함하여 {int(totalPrice*book.getTax())}입니다.')
+    elif bookType =='2':
+        for book in booklist:
+            if isinstance(book,Book.PaperBook):
+                totalPrice += int(book.getPrice())
+                print(f'총 가격은 세금을 제외하고 {totalPrice}이며, 부가세를 포함하여 {int(totalPrice*book.getTax())}입니다.')
+    else:
+        print(f'1과 2중에서 입력해주세요')
+    if totalPrice ==0:
+        print(f'등록된 책이 없습니다.')
+
+            
+        
+
             
             
 
