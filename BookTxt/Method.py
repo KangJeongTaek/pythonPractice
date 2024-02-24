@@ -1,7 +1,6 @@
 import Book
 import shutil
-ebooklist = []
-paerperbooklist = []
+
 def registration():
     print("-" * 30)
     name = input('도서 이름을 입력하세요 : ')
@@ -28,6 +27,7 @@ def registration():
             while(True):
                 try:
                     size = int(input('페이지를 입력해주세요 : '))
+
                     #Paperbook 텍스트에 등록
                     with open('./Booktxt/Paperbook.txt',mode='a',encoding='utf-8') as f_paper:
                         f_paper.write(f'{name},{author},{price},{publisher},{size}\n')
@@ -68,10 +68,10 @@ def search():
 
 def delete():
     deleteBookName = input('삭제하시려는 책의 이름을 적어주세요 : ')
-    found = False
-    found2 = False
-    found3 = False
-    temp_file = './Booktxt/temp.txt'
+    found = False # Allbook 에서 확인
+    found2 = False # Ebook에서 확인
+    found3 = False # Paperbook에서 확인
+    temp_file = './Booktxt/temp.txt' #
     with open('./Booktxt/AllBook.txt',mode='r',encoding='utf-8') as f_all,open(temp_file,mode='w',encoding='utf-8') as f_temp,\
     open('./Booktxt/Ebook.txt',mode='r',encoding='utf-8') as f_ebook, open('./Booktxt/temp_ebook.txt',mode='w',encoding='utf-8')as f_etemp,\
     open('./Booktxt/Paperbook.txt',mode='r',encoding='utf-8') as f_pbook, open('./Booktxt/temp_pbook.txt',mode='w',encoding='utf-8')as f_ptemp:
@@ -132,7 +132,7 @@ def confirmation():
             print(f'-'*30)
     
 def purChase():
-    bookType = input('1. 전자책 | 2. 종이책')
+    purChaseName = input('구매하실 책의 이름을 선택하세요. : ')
     
 
             
