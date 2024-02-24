@@ -12,16 +12,26 @@ def registration():
         except ValueError:
             print('숫자를 입력하세요.')
     publisher = input('출판사를 입력하세요 : ')
+
+    while True:
+        try:
+            stock = int(input('재고를 입력하세요.'))
+            if stock <= 0:
+                print('1 이상의 숫자를 입력하세요.')
+                continue
+            break
+        except ValueError:
+            print('숫자를 입력하세요.')
     while(True):
         epCheck = input('1. 전자책 2. 종이책 : ')
         if epCheck == '1': 
             device = input('호환 기기를 입력해주세요.')
             #Ebook 텍스트에 등록
             with open('./Booktxt/Ebook.txt',mode='a',encoding='utf-8') as f_ebook:
-                f_ebook.write(f'{name},{author},{price},{publisher},{device}\n')
+                f_ebook.write(f'{name},{author},{price},{publisher},{device},{stock}\n')
             #전체 책 목록에 등록
             with open('./BookTxt./Allbook.txt',mode='a',encoding='utf-8') as f_all:
-                f_all.write(f'Ebook,{name},{author},{price},{publisher},{device}\n')
+                f_all.write(f'Ebook,{name},{author},{price},{publisher},{device},{stock}\n')
             break
         elif epCheck == '2':
             while(True):
@@ -30,10 +40,10 @@ def registration():
 
                     #Paperbook 텍스트에 등록
                     with open('./Booktxt/Paperbook.txt',mode='a',encoding='utf-8') as f_paper:
-                        f_paper.write(f'{name},{author},{price},{publisher},{size}\n')
+                        f_paper.write(f'{name},{author},{price},{publisher},{size},{stock}\n')
                     #전체 책 목록에 등록
                     with open('./BookTxt./Allbook.txt',mode='a',encoding='utf-8') as f_all:
-                        f_all.write(f'Paperbook,{name},{author},{price},{publisher},{size}\n')
+                        f_all.write(f'Paperbook,{name},{author},{price},{publisher},{size},{stock}\n')
                     break
                 except ValueError:
                     print('숫자를 입력해주십시오')
@@ -61,6 +71,7 @@ def search():
                     print(f'호환 기기: {book_info[5]}')
                 elif book_info[0] == 'Paperbook':
                     print(f'페이지 수 : {book_info[5]}')
+                print(f'재고 : {book_info[6]}')
                 print('-' * 30)
                 found = True
     if not found:
@@ -118,6 +129,7 @@ def confirmation():
             print(f'가격 : {book_info[2]}')
             print(f'출판사 : {book_info[3]}')
             print(f'호환기기 : {book_info[4]}')
+            print(f'재고 : {book_info[5]}')
             print(f'-'*30)
     with open(PaperBook,mode='r',encoding='utf-8') as f_pbook:
         print(f'{"종이책":>15}')
@@ -129,10 +141,81 @@ def confirmation():
             print(f'가격 : {book_info[2]}')
             print(f'출판사 : {book_info[3]}')
             print(f'페이지 수 : {book_info[4]}')
+            print(f'재고 : {book_info[5]}')
             print(f'-'*30)
     
-def purChase():
-    purChaseName = input('구매하실 책의 이름을 선택하세요. : ')
+def purchase():
+    allbook = './BookTxt/Allbook.txt'
+    paperbook = './BookTxt/Paperbook.txt'
+    ebook = './BookTxt/Ebook.txt'
+    alltemp = './BookTxt/tamp.txt'
+    paperbooktamp = './BookTxt/temp_pbook.txt'
+    ebooktamp = './BookTxt/tamp_ebook.txt'
+    
+    purchaseName = input('구매하실 책의 이름을 선택하세요: ')
+
+    foundName = False
+    execution = False
+    with open(allbook,encoding='utf-8',mode = 'r') as f_all,open(alltemp,mode ='w',encoding='utf-8') as f_temp ,\
+        open(paperbook,mode ='r',encoding = 'utf-8') as f_p, open(paperbooktamp,mode='w',encoding = 'utf-8')as f_ptamp,\
+        open(ebook,mode='r',encoding='utf-8')as f_e,open(ebooktamp,mode='w',encoding='utf-8') as f_etamp:
+        for lineA in f_all.readlines():
+            book_infoA = lineA.strip().split(',')
+            if book_infoA[1] == purchaseName:
+                foundName = True
+                try:
+                    quantity = int(input('구매하실 수량을 입력하세요.'))
+                    if quantity > int(book_infoA[6]):
+                        print('재고가 부족합니다.')
+                        break
+                    elif quantity <= 0:
+                        print('올바른 값을 입력해주세요.')
+                        break
+                    else:
+                        execution = True
+
+                        book_infoA[6] = str(int(book_infoA[6]) - quantity)
+                        lineA = ','.join(book_infoA) + '\n'
+                        f_temp.write(lineA)
+
+                        f_p.seek(0)
+                        for lineP in f_p.readlines():
+                            book_infoP = lineP.strip().split(',')
+                            if book_infoP[0] == purchaseName:
+                                book_infoP[5] = str(int(book_infoP[5]) - quantity)
+                                lineP = ','.join(book_infoP) + '\n'
+                                f_ptamp.write(lineP)
+
+                        f_e.seek(0)
+                        for lineE in f_e.readlines():
+                            book_infoE = lineE.strip().split(',')
+                            if book_infoE[0] == purchaseName:
+                                book_infoE[5] = str(int(book_infoE[5]) -quantity)
+                                lineE = ','.join(book_infoE) +'\n'
+                                f_etamp.write(lineE)
+
+
+
+                except ValueError:
+                    print('올바른 수량을 입력하세요.')
+                    break
+
+
+      
+    if not foundName :
+        print(f'{purchaseName}은 재고에 없는 책 제목입니다.')
+    elif execution:
+        shutil.copy(alltemp,allbook)
+        shutil.copy(ebooktamp,ebook)
+        shutil.copy(paperbooktamp,paperbook)
+        print(f'{purchaseName}을(를) 구매했습니다.')
+        if True: #재고가 0 이하가 된다면
+            pass
+                
+
+            
+           
+
     
 
             

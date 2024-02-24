@@ -1,7 +1,7 @@
 import Method
 
 while(True):
-    inputNum = input('1. 도서 등록\n2. 도서 검색\n3. 도서 삭제\n4. 도서 확인\n0.종료\n')
+    inputNum = input('1. 도서 등록\n2. 도서 검색\n3. 도서 삭제\n4. 도서 확인\n5. 도서 구입 \n0.종료\n')
     if inputNum == '1':
         print('도서 등록 하겠습니다.')
         Method.registration()
@@ -14,6 +14,9 @@ while(True):
     elif inputNum == '4':
         print('도서 확인하겠습니다.')
         Method.confirmation()
+    elif inputNum == '5':
+        print('도서 구입하겠습니다.')
+        Method.purchase()
     elif inputNum == '0':
         print('종료하겠습니다.')
         break
