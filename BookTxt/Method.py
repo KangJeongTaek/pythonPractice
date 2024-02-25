@@ -1,5 +1,33 @@
 import Book
 import shutil
+import os
+
+allbook = './BookTxt/Allbook.txt'
+paperbook = './BookTxt/Paperbook.txt'
+ebook = './BookTxt/Ebook.txt'
+alltemp = './BookTxt/tamp.txt'
+paperbooktamp = './BookTxt/temp_pbook.txt'
+ebooktamp = './BookTxt/tamp_ebook.txt'
+
+def exit():
+    os.remove(alltemp)
+    os.remove(paperbooktamp)
+    os.remove(ebooktamp)
+
+
+def update_inventory(book_name,bookType,original_file,temp_file):
+    with open(original_file,mode='r',encoding='utf-8') as f_original,open(temp_file,mode='w',encoding='utf-8') as f_temp:
+        stockout = False
+        for line in f_original.readlines():
+            book_info = line.strip().split(',')
+            if int(book_info[-1]) > 0:
+                f_temp.write(line)
+            else:
+                stockout = True
+        if stockout:
+            print(f'{book_name}이(가) 품절됐습니다. {bookType} 재고에서 삭제합니다.')
+    shutil.copy(temp_file,original_file)
+
 
 def registration():
     print("-" * 30)
@@ -145,12 +173,7 @@ def confirmation():
             print(f'-'*30)
     
 def purchase():
-    allbook = './BookTxt/Allbook.txt'
-    paperbook = './BookTxt/Paperbook.txt'
-    ebook = './BookTxt/Ebook.txt'
-    alltemp = './BookTxt/tamp.txt'
-    paperbooktamp = './BookTxt/temp_pbook.txt'
-    ebooktamp = './BookTxt/tamp_ebook.txt'
+
     
     purchaseName = input('구매하실 책의 이름을 선택하세요: ')
 
@@ -206,11 +229,18 @@ def purchase():
         print(f'{purchaseName}은 재고에 없는 책 제목입니다.')
     elif execution:
         shutil.copy(alltemp,allbook)
-        shutil.copy(ebooktamp,ebook)
         shutil.copy(paperbooktamp,paperbook)
+        shutil.copy(ebooktamp,ebook)
         print(f'{purchaseName}을(를) 구매했습니다.')
-        if True: #재고가 0 이하가 된다면
-            pass
+        update_inventory(purchaseName,'전체책',allbook,alltemp)
+        update_inventory(purchaseName,'종이책',paperbook,paperbooktamp)
+        update_inventory(purchaseName,'전자책',ebook,ebooktamp)
+        
+        
+
+
+
+    
                 
 
             
