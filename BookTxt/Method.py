@@ -57,6 +57,7 @@ def registration():
             #Ebook 텍스트에 등록
             with open('./Booktxt/Ebook.txt',mode='a',encoding='utf-8') as f_ebook:
                 f_ebook.write(f'{name},{author},{price},{publisher},{device},{stock}\n')
+
             #전체 책 목록에 등록
             with open('./BookTxt./Allbook.txt',mode='a',encoding='utf-8') as f_all:
                 f_all.write(f'Ebook,{name},{author},{price},{publisher},{device},{stock}\n')
