@@ -19,7 +19,7 @@ while(True):
         Method.purchase()
     elif inputNum == '0':
         print('종료하겠습니다.')
-        exit()
+        Method.clean()
         break
     else:
         print('잘못된 입력입니다.')
