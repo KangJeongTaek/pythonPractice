@@ -65,34 +65,75 @@ def registration():
             device = input('호환 기기를 입력해주세요.')
             #Ebook 텍스트에 등록
             sameBook = False
+            # 같은 책 정보라면 재고만 증가
             with open(ebook,mode='r',encoding='utf-8') as f_eb, open(ebooktamp,mode='w',encoding='utf-8') as f_etemp:
                 for line in f_eb.readlines():
                     book_info = line.strip().split(',')
                     if book_info[0] == name and book_info[1] == author and int(book_info[2]) == price and book_info[3] == publisher and book_info[4] == device:
-                        book_info[-1] == str(stock + int(book_info[-1]))
+                        book_info[-1] =str(stock + int(book_info[-1]))
                         sameBook = True
                         line = ','.join(book_info) + '\n'
                         f_etemp.write(line)
             if sameBook:
                 shutil.copy(ebooktamp,ebook)
-            if not sameBook: # 뭔가 제대로 실행되고 있지 않음
+            if not sameBook:
                 with open('./Booktxt/Ebook.txt',mode='a',encoding='utf-8') as f_ebook:
                     f_ebook.write(f'{name},{author},{price},{publisher},{device},{stock}\n')
+
+
             #전체 책 목록에 등록
-            with open('./BookTxt./Allbook.txt',mode='a',encoding='utf-8') as f_all:
-                f_all.write(f'Ebook,{name},{author},{price},{publisher},{device},{stock}\n')
+            sameaBook = False
+            # 같은 책 정보라면 재고만 증가
+            with open(allbook,mode='r',encoding='utf-8') as f_ab, open(alltemp,mode='w',encoding='utf-8') as f_atemp:
+                for line in f_ab.readlines():
+                    book_info = line.strip().split(',')
+                    if book_info[1] == name and book_info[2] == author and int(book_info[3]) == price and book_info[4] == publisher and book_info[5] == device:
+                        book_info[-1] = str(stock + int(book_info[-1]))
+                        sameaBook = True
+                        line = ','.join(book_info) +'\n'
+                        f_atemp.write(line)
+
+            if sameaBook:
+                shutil.copy(alltemp,allbook)
+            elif not sameBook:
+                with open('./BookTxt./Allbook.txt',mode='a',encoding='utf-8') as f_all:
+                    f_all.write(f'Ebook,{name},{author},{price},{publisher},{device},{stock}\n')
             break
         elif epCheck == '2':
             while(True):
                 try:
                     size = int(input('페이지를 입력해주세요 : '))
-
                     #Paperbook 텍스트에 등록
-                    with open('./Booktxt/Paperbook.txt',mode='a',encoding='utf-8') as f_paper:
-                        f_paper.write(f'{name},{author},{price},{publisher},{size},{stock}\n')
+                    sameBook = False
+                    # 같은 책 정보라면 재고만 증가
+                    with open(paperbook,mode='r',encoding='utf-8') as f_pb, open(paperbooktamp,mode='w',encoding='utf-8') as f_ptemp:
+                        for line in f_pb.readlines():
+                            book_info = line.strip().split(',')
+                            if book_info[0] == name and book_info[1] == author and int(book_info[2]) == price and book_info[3] == publisher and int(book_info[4]) == size:
+                                book_info[-1] = str(stock + int(book_info[-1]))
+                                sameBook = True
+                                line = ','.join(book_info) +'\n'
+                                f_ptemp.write(line)
+                    if sameBook:
+                            shutil.copy(paperbooktamp,paperbook)
+                    elif not sameBook:
+                            with open('./Booktxt/Paperbook.txt',mode='a',encoding='utf-8') as f_paper:
+                                f_paper.write(f'{name},{author},{price},{publisher},{size},{stock}\n')
                     #전체 책 목록에 등록
-                    with open('./BookTxt./Allbook.txt',mode='a',encoding='utf-8') as f_all:
-                        f_all.write(f'Paperbook,{name},{author},{price},{publisher},{size},{stock}\n')
+                    with open(allbook,mode='r',encoding='utf-8') as f_ab, open(alltemp,mode='w',encoding='utf-8') as f_atemp:
+                        for line in f_ab.readlines():
+                            book_info = line.strip().split(',')
+                            if book_info[1] == name and book_info[2] == author and int(book_info[3]) == price and book_info[4] == publisher and int(book_info[5]) == size:
+                                book_info[-1] = str(stock + int(book_info[-1]))
+                                sameBook = True
+                                line = ','.join(book_info) +'\n'
+                                f_atemp.write(line)
+
+                    if sameBook:
+                        shutil.copy(alltemp,allbook)
+                    elif not sameBook:
+                        with open('./BookTxt./Allbook.txt',mode='a',encoding='utf-8') as f_all:
+                            f_all.write(f'Paperbook,{name},{author},{price},{publisher},{size},{stock}\n')
                     break
                 except ValueError:
                     print('숫자를 입력해주십시오')
