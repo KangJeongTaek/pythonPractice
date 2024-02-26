@@ -82,18 +82,18 @@ def registration():
 
 
             #전체 책 목록에 등록
-            sameaBook = False
+            sameBook = False
             # 같은 책 정보라면 재고만 증가
             with open(allbook,mode='r',encoding='utf-8') as f_ab, open(alltemp,mode='w',encoding='utf-8') as f_atemp:
                 for line in f_ab.readlines():
                     book_info = line.strip().split(',')
                     if book_info[1] == name and book_info[2] == author and int(book_info[3]) == price and book_info[4] == publisher and book_info[5] == device:
                         book_info[-1] = str(stock + int(book_info[-1]))
-                        sameaBook = True
+                        sameBook = True
                         line = ','.join(book_info) +'\n'
                         f_atemp.write(line)
 
-            if sameaBook:
+            if sameBook:
                 shutil.copy(alltemp,allbook)
             elif not sameBook:
                 with open('./BookTxt./Allbook.txt',mode='a',encoding='utf-8') as f_all:
@@ -103,8 +103,8 @@ def registration():
             while(True):
                 try:
                     size = int(input('페이지를 입력해주세요 : '))
-                    #Paperbook 텍스트에 등록
                     sameBook = False
+                    #Paperbook 텍스트에 등록
                     # 같은 책 정보라면 재고만 증가
                     with open(paperbook,mode='r',encoding='utf-8') as f_pb, open(paperbooktamp,mode='w',encoding='utf-8') as f_ptemp:
                         for line in f_pb.readlines():
@@ -120,6 +120,8 @@ def registration():
                             with open('./Booktxt/Paperbook.txt',mode='a',encoding='utf-8') as f_paper:
                                 f_paper.write(f'{name},{author},{price},{publisher},{size},{stock}\n')
                     #전체 책 목록에 등록
+                                
+                    sameBook = False
                     with open(allbook,mode='r',encoding='utf-8') as f_ab, open(alltemp,mode='w',encoding='utf-8') as f_atemp:
                         for line in f_ab.readlines():
                             book_info = line.strip().split(',')
