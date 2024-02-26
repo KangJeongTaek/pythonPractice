@@ -1,4 +1,3 @@
-import Book
 import shutil
 import os
 
@@ -10,6 +9,12 @@ paperbooktamp = './BookTxt/temp_pbook.txt'
 ebooktamp = './BookTxt/tamp_ebook.txt'
 
 def exit():
+    allbook = './BookTxt/Allbook.txt'
+    paperbook = './BookTxt/Paperbook.txt'
+    ebook = './BookTxt/Ebook.txt'
+    alltemp = './BookTxt/tamp.txt'
+    paperbooktamp = './BookTxt/temp_pbook.txt'
+    ebooktamp = './BookTxt/tamp_ebook.txt'
     os.remove(alltemp)
     os.remove(paperbooktamp)
     os.remove(ebooktamp)
@@ -55,20 +60,20 @@ def registration():
         if epCheck == '1':
             device = input('호환 기기를 입력해주세요.')
             #Ebook 텍스트에 등록
-            sameBook = False
-            with open(ebook,mode='r',encoding='utf-8') as f_eb, open(ebooktamp,mode='w',encoding='utf-8') as f_etemp:
-                for line in f_eb.readlines():
-                    book_info = line.strip().split(',')
-                    if book_info[0] == name and book_info[1] == author and int(book_info[2]) == price and book_info[3] == publisher and book_info[4] == device:
-                        book_info[-1] == str(stock + int(book_info[-1]))
-                        sameBook = True
-                        line = ','.join(book_info) + '\n'
-                        f_etemp.write(line)
-            if sameBook:
-                shutil.copy(ebooktamp,ebook)
-            if not sameBook: # 뭔가 제대로 실행되고 있지 않음
-                with open('./Booktxt/Ebook.txt',mode='a',encoding='utf-8') as f_ebook:
-                    f_ebook.write(f'{name},{author},{price},{publisher},{device},{stock}\n')
+            # sameBook = False
+            # with open(ebook,mode='r',encoding='utf-8') as f_eb, open(ebooktamp,mode='w',encoding='utf-8') as f_etemp:
+            #     for line in f_eb.readlines():
+            #         book_info = line.strip().split(',')
+            #         if book_info[0] == name and book_info[1] == author and int(book_info[2]) == price and book_info[3] == publisher and book_info[4] == device:
+            #             book_info[-1] == str(stock + int(book_info[-1]))
+            #             sameBook = True
+            #             line = ','.join(book_info) + '\n'
+            #             f_etemp.write(line)
+            # if sameBook:
+            #     shutil.copy(ebooktamp,ebook)
+            # if not sameBook: # 뭔가 제대로 실행되고 있지 않음
+            with open('./Booktxt/Ebook.txt',mode='a',encoding='utf-8') as f_ebook:
+                f_ebook.write(f'{name},{author},{price},{publisher},{device},{stock}\n')
             #전체 책 목록에 등록
             with open('./BookTxt./Allbook.txt',mode='a',encoding='utf-8') as f_all:
                 f_all.write(f'Ebook,{name},{author},{price},{publisher},{device},{stock}\n')
@@ -115,7 +120,7 @@ def search():
                 print('-' * 30)
                 found = True
     if not found:
-        print('찾으시는 책이 없습니다.')  
+        print('찾으시는 책이 없습니다.')
 
 def delete():
     deleteBookName = input('삭제하시려는 책의 이름을 적어주세요 : ')
@@ -123,7 +128,7 @@ def delete():
     found2 = False # Ebook에서 확인
     found3 = False # Paperbook에서 확인
     temp_file = './Booktxt/temp.txt' #
-    with open('./Booktxt/AllBook.txt',mode='r',encoding='utf-8') as f_all,open(temp_file,mode='w',encoding='utf-8') as f_temp,\
+    with open('./Booktxt/AllBook.txt',mode='r',encoding='utf-8') as f_all,open('./Booktxt/temp.txt',mode='w',encoding='utf-8') as f_temp,\
     open('./Booktxt/Ebook.txt',mode='r',encoding='utf-8') as f_ebook, open('./Booktxt/temp_ebook.txt',mode='w',encoding='utf-8')as f_etemp,\
     open('./Booktxt/Paperbook.txt',mode='r',encoding='utf-8') as f_pbook, open('./Booktxt/temp_pbook.txt',mode='w',encoding='utf-8')as f_ptemp:
         for line in f_all.readlines():
@@ -149,7 +154,7 @@ def delete():
         print(f'찾으시는 이름의 책이 없습니다.')
     else:
         shutil.copy('./Booktxt/AllBook.txt', './Booktxt/AllBook_backup.txt')
-        shutil.move(temp_file,'./Booktxt/AllBook.txt')
+        shutil.move('./Booktxt/temp.txt','./Booktxt/AllBook.txt')
         shutil.copy('./Booktxt/Ebook.txt','./Booktxt/Ebook_backup.txt')
         shutil.move('./Booktxt/temp_ebook.txt','./Booktxt/Ebook.txt')
         shutil.copy('./Booktxt/Paperbook.txt','./Booktxt/Paperbook_backup.txt')
@@ -236,7 +241,6 @@ def purchase():
                     break
 
 
-      
     if not foundName :
         print(f'{purchaseName}은 재고에 없는 책 제목입니다.')
     elif execution:
@@ -249,22 +253,3 @@ def purchase():
         update_inventory(purchaseName,'전자책',ebook,ebooktamp)
         
         
-
-
-
-    
-                
-
-            
-           
-
-    
-
-            
-        
-
-            
-            
-
-
-    
