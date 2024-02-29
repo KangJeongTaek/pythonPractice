@@ -33,11 +33,10 @@ class qtApp(QWidget):
     def btnSearchClicked (self): #버튼 서치 클릭시 처리
         searchWord = self.searchTxt.text().strip()
         if len(searchWord) == 0: #Validation Check(입력 검증)
-            QMessageBox.about(self,'네이버검색','검색어를 입력해주세요')
+            QMessageBox.about(self,'부산 도서관','검색어를 입력해주세요')
             return # 함수 탈출
         else:
             pass
-        #QMessageBox.about(self,'네이버검색','검색시작!!!')
         #검색 시작
         app = BusanLibrary() #api 객체 생성
         jsonSearch = app.getSearchResult(searchWord)
