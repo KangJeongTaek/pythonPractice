@@ -20,18 +20,16 @@ class qtApp(QWidget):
         #self.setWindowIcon(QIcon('./images/newspaper.png'))
         uic.loadUi('./json/busanLibrary.ui',self)
         self.btnSearch.clicked.connect(self.btnSearchClicked) #버튼 서치 클릭시 처리
-        self.searchTxt.returnPressed.connect(self.btnSearchClicked) #검색버튼 시그널 함수 연결
-        #self.tblSearchResult.cellDoubleClicked.connect(self.tblResultDoubleClicked) # 셀 더블 클릭시 처리
-
+        self.tblSearch.cellDoubleClicked.connect(self.tblResultDoubleClicked) # 셀 더블 클릭시 처리
         self.show()
 
     def tblResultDoubleClicked(self): #셀 클릭시 처리
-        selectRow = self.tblSearchResult.currentRow() #현재 선택된 행의 인덱스
-        url = self.tblSearchResult.item(selectRow,1).text()
+        selectRow = self.tblSearch.currentRow() #현재 선택된 행의 인덱스
+        url = self.tblSearch.item(selectRow,3).text()
         webbrowser.open(url) # 웹브라우저에서 열기
 
     def btnSearchClicked (self): #버튼 서치 클릭시 처리
-        searchWord = self.searchTxt.text().strip()
+        searchWord = self.comboarea.currentText()
         if len(searchWord) == 0: #Validation Check(입력 검증)
             QMessageBox.about(self,'부산 도서관','검색어를 입력해주세요')
             return # 함수 탈출
@@ -45,18 +43,21 @@ class qtApp(QWidget):
 
 
     def makeTable(self,data):
-        print(data)
-        result = data['getLibraryInfo']['body']['items']['item']
-        self.tblSearch.setColumnCount(4)
-        self.tblSearch.setRowCount(len(result))
-        self.tblSearch.setHorizontalHeaderLabels(['도서관 이름','도서관 주소','도서관 전화 번호','도서관 홈페이지'])
-        n = 0
-        for post in result:
-            self.tblSearch.setItem(n,0,QTableWidgetItem(post['library_nm']))
-            self.tblSearch.setItem(n,1,QTableWidgetItem(post['library_addr']))
-            self.tblSearch.setItem(n,2,QTableWidgetItem(post['library_tel']))
-            self.tblSearch.setItem(n,3,QTableWidgetItem(post['library_hompage']))
-            n+=1
+        try:
+            result = data['getLibraryInfo']['body']['items']['item']
+            self.tblSearch.setColumnCount(4)
+            self.tblSearch.setRowCount(len(result))
+            self.tblSearch.setHorizontalHeaderLabels(['도서관 이름','도서관 주소','도서관 전화 번호','도서관 홈페이지'])
+            n = 0
+            for post in result:
+                self.tblSearch.setItem(n,0,QTableWidgetItem(post['library_nm']))
+                self.tblSearch.setItem(n,1,QTableWidgetItem(post['library_addr']))
+                self.tblSearch.setItem(n,2,QTableWidgetItem(post['library_tel']))
+                self.tblSearch.setItem(n,3,QTableWidgetItem(post['library_hompage']))
+                n+=1
+            self.tblSearch.resizeColumnsToContents()
+        except TypeError:
+            QMessageBox.warning(self,'경고','제대로 된 구를 입력해주세요',buttons=QMessageBox.Ok)
             
 
     def closeEvent(self, QCloseEvent): # 오버라이드(재정의)
