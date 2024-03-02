@@ -4,7 +4,6 @@ from urllib import parse
 import json # 학습 필요
 import datetime
 import ssl
-
 import requests
 
 class BusanLibrary:
