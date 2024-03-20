@@ -61,7 +61,7 @@ fig, ax = plt.subplots()
 
 # APScheduler를 사용하여 5분마다 업데이트
 scheduler = BlockingScheduler()
-scheduler.add_job(update_chart, 'interval', minutes=5)
+scheduler.add_job(update_chart, 'interval', minutes=1)
 
 try:
     scheduler.start()
