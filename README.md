@@ -8,6 +8,6 @@
 
 ## PyQt5와 공공 API를 활용해서 부산 지역의 구별 도서관 검색하는 앱 만들기
 <video src="https://raw.githubusercontent.com/KangJeongTaek/pythonPractice/main/images/video01.mp4" width="670px">
-
+</video>
 ## 공공 API를 활용해서 부산의 다리별 강수 범량 시각화 해보기
 <img src="https://raw.githubusercontent.com/KangJeongTaek/pythonPractice/main/images/image03.png" width="670px">
